@@ -1,0 +1,252 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2>{{ t('conversion_rate_title') }}</h2>
+        <p class="text-muted">{{ t('conversion_rate_subtitle') }}</p>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">{{ t('conversion_rate_title') }}</h5>
+            </div>
+            <div class="card-body">
+                {% if error %}
+                <div class="alert alert-danger error-message">
+                    {{ error }}
+                </div>
+                {% endif %}
+                
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="control_visitors" class="form-label">{{ t('conversion_rate_control_visitors') }}</label>
+                        <input type="number" class="form-control" id="control_visitors" 
+                               name="control_visitors" value="{{ control_visitors or '' }}" 
+                               min="1" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="control_conversions" class="form-label">{{ t('conversion_rate_control_conversions') }}</label>
+                        <input type="number" class="form-control" id="control_conversions" 
+                               name="control_conversions" value="{{ control_conversions or '' }}" 
+                               min="0" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="variant_visitors" class="form-label">{{ t('conversion_rate_variant_visitors') }}</label>
+                        <input type="number" class="form-control" id="variant_visitors" 
+                               name="variant_visitors" value="{{ variant_visitors or '' }}" 
+                               min="1" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="variant_conversions" class="form-label">{{ t('conversion_rate_variant_conversions') }}</label>
+                        <input type="number" class="form-control" id="variant_conversions" 
+                               name="variant_conversions" value="{{ variant_conversions or '' }}" 
+                               min="0" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">{{ t('button_calculate') }}</button>
+                    <button type="reset" class="btn btn-secondary">{{ t('button_reset') }}</button>
+                    <button type="button" class="btn btn-outline-info" onclick="prefillConversionRate()">{{ t('button_prefill') }}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-6">
+        {% if result %}
+        <div class="card shadow-sm result-card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">{{ t('conversion_rate_results') }}</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <tr>
+                        <td><strong>{{ t('conversion_rate_control_rate') }}</strong></td>
+                        <td>{{ "%.2f"|format(result.control_rate) }}%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>{{ t('conversion_rate_variant_rate') }}</strong></td>
+                        <td>{{ "%.2f"|format(result.variant_rate) }}%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>{{ t('conversion_rate_absolute_lift') }}</strong></td>
+                        <td>{{ "%.2f"|format(result.absolute_lift) }}%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>{{ t('conversion_rate_relative_lift') }}</strong></td>
+                        <td>{{ "%.2f"|format(result.relative_lift) }}%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>{{ t('conversion_rate_z_score') }}</strong></td>
+                        <td>{{ "%.4f"|format(result.z_score) }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>{{ t('conversion_rate_p_value') }}</strong></td>
+                        <td>{{ "%.4f"|format(result.p_value) }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>{{ t('conversion_rate_significant' if result.is_significant else 'conversion_rate_not_significant') }}</strong></td>
+                        <td>
+                            <span class="badge bg-{{ 'success' if result.is_significant else 'warning' }}">
+                                {{ t('conversion_rate_significant' if result.is_significant else 'conversion_rate_not_significant') }}
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+                <div class="alert alert-info mt-3">
+                    <strong>{{ t('conversion_rate_interpretation') }}:</strong> {{ result.interpretation }}
+                </div>
+                
+                {% if 'ci_control_lower' in result %}
+                <div class="mt-4">
+                    <h6>{{ t('conversion_rate_ci') }}</h6>
+                    <canvas id="ciChart" style="max-height: 200px;"></canvas>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function prefillConversionRate() {
+    document.getElementById('control_visitors').value = '1000';
+    document.getElementById('control_conversions').value = '50';
+    document.getElementById('variant_visitors').value = '1000';
+    document.getElementById('variant_conversions').value = '60';
+}
+</script>
+{% if result and 'ci_control_lower' in result %}
+<script>
+    const ctx = document.getElementById('ciChart').getContext('2d');
+    
+    const controlRate = {{ result.control_rate }};
+    const variantRate = {{ result.variant_rate }};
+    const controlLower = {{ result.ci_control_lower }};
+    const controlUpper = {{ result.ci_control_upper }};
+    const variantLower = {{ result.ci_variant_lower }};
+    const variantUpper = {{ result.ci_variant_upper }};
+    
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['{{ t("conversion_rate_control_rate") }}', '{{ t("conversion_rate_variant_rate") }}'],
+            datasets: [{
+                label: 'Conversion Rate (%)',
+                data: [controlRate, variantRate],
+                backgroundColor: ['rgba(54, 162, 235, 0.6)', 'rgba(255, 99, 132, 0.6)'],
+                borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255, 99, 132, 1)'],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const index = context.dataIndex;
+                            let ciText;
+                            if (index === 0) {
+                                ciText = `CI: [${controlLower.toFixed(2)}%, ${controlUpper.toFixed(2)}%]`;
+                            } else {
+                                ciText = `CI: [${variantLower.toFixed(2)}%, ${variantUpper.toFixed(2)}%]`;
+                            }
+                            return [
+                                `${context.label}: ${context.parsed.x.toFixed(2)}%`,
+                                ciText
+                            ];
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: '{{ t("conversion_rate_ci_x_axis") }}'
+                    },
+                    beginAtZero: true,
+                    max: Math.max(controlUpper, variantUpper) * 1.15
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: '{{ t("conversion_rate_ci_y_axis") }}'
+                    }
+                }
+            },
+            animation: {
+                onComplete: function() {
+                    const chart = this.chart;
+                    const ctx = chart.ctx;
+                    const meta = chart.getDatasetMeta(0);
+                    
+                    // Draw CI error bars for control
+                    const controlBar = meta.data[0];
+                    const controlBarY = controlBar.y;
+                    const barHeight = controlBar.height;
+                    
+                    ctx.strokeStyle = 'rgba(54, 162, 235, 1)';
+                    ctx.lineWidth = 2;
+                    const controlLowerX = chart.scales.x.getPixelForValue(controlLower);
+                    const controlUpperX = chart.scales.x.getPixelForValue(controlUpper);
+                    const controlBarX = chart.scales.x.getPixelForValue(controlRate);
+                    
+                    // Horizontal line for CI range
+                    ctx.beginPath();
+                    ctx.moveTo(controlLowerX, controlBarY);
+                    ctx.lineTo(controlUpperX, controlBarY);
+                    ctx.stroke();
+                    
+                    // Vertical lines at CI bounds
+                    ctx.beginPath();
+                    ctx.moveTo(controlLowerX, controlBarY - barHeight/2 - 5);
+                    ctx.lineTo(controlLowerX, controlBarY + barHeight/2 + 5);
+                    ctx.moveTo(controlUpperX, controlBarY - barHeight/2 - 5);
+                    ctx.lineTo(controlUpperX, controlBarY + barHeight/2 + 5);
+                    ctx.stroke();
+                    
+                    // Draw CI error bars for variant
+                    const variantBar = meta.data[1];
+                    const variantBarY = variantBar.y;
+                    
+                    ctx.strokeStyle = 'rgba(255, 99, 132, 1)';
+                    const variantLowerX = chart.scales.x.getPixelForValue(variantLower);
+                    const variantUpperX = chart.scales.x.getPixelForValue(variantUpper);
+                    
+                    // Horizontal line for CI range
+                    ctx.beginPath();
+                    ctx.moveTo(variantLowerX, variantBarY);
+                    ctx.lineTo(variantUpperX, variantBarY);
+                    ctx.stroke();
+                    
+                    // Vertical lines at CI bounds
+                    ctx.beginPath();
+                    ctx.moveTo(variantLowerX, variantBarY - barHeight/2 - 5);
+                    ctx.lineTo(variantLowerX, variantBarY + barHeight/2 + 5);
+                    ctx.moveTo(variantUpperX, variantBarY - barHeight/2 - 5);
+                    ctx.lineTo(variantUpperX, variantBarY + barHeight/2 + 5);
+                    ctx.stroke();
+                }
+            }
+        }
+    });
+</script>
+{% endif %}
+{% endblock %}
+

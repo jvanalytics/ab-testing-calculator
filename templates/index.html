@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 text-center mb-5">
+        <h1 class="display-4">{{ t('home_title') }}</h1>
+        <p class="lead text-muted">{{ t('home_subtitle') }}</p>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-graph-up-arrow"></i> {{ t('home_card_conversion') }}
+                </h5>
+                <p class="card-text">{{ t('home_card_conversion_desc') }}</p>
+                <a href="/conversion-rate" class="btn btn-primary">{{ t('button_calculate') }}</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-bar-chart"></i> {{ t('home_card_average') }}
+                </h5>
+                <p class="card-text">{{ t('home_card_average_desc') }}</p>
+                <a href="/average-value" class="btn btn-primary">{{ t('button_calculate') }}</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-calendar-check"></i> {{ t('home_card_planner_prop') }}
+                </h5>
+                <p class="card-text">{{ t('home_card_planner_prop_desc') }}</p>
+                <a href="/planner-proportion" class="btn btn-primary">{{ t('button_calculate') }}</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-calculator"></i> {{ t('home_card_planner_avg') }}
+                </h5>
+                <p class="card-text">{{ t('home_card_planner_avg_desc') }}</p>
+                <a href="/planner-average" class="btn btn-primary">{{ t('button_calculate') }}</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
