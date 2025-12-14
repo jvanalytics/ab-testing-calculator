@@ -17,6 +17,12 @@ app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
 
 
+@app.context_processor
+def inject_gtm_id():
+    """Make GTM ID available in all templates"""
+    return dict(gtm_id=os.environ.get('GTM_ID', ''))
+
+
 @app.route('/')
 def index():
     """Home page with navigation to all calculators"""
