@@ -9,7 +9,7 @@ import numpy as np
 
 
 def two_proportion_z_test(control_visitors, control_conversions,
-                          variant_visitors, variant_conversions):
+                          variant_visitors, variant_conversions, alpha=0.05):
     """
     Two-Proportion Z-Test for comparing conversion rates
     
@@ -22,6 +22,7 @@ def two_proportion_z_test(control_visitors, control_conversions,
         control_conversions: Number of conversions in control group
         variant_visitors: Number of visitors in variant group
         variant_conversions: Number of conversions in variant group
+        alpha: Significance level (default 0.05)
     
     Returns:
         dict with conversion rates, lift, z-score, p-value, significance, interpretation
@@ -55,11 +56,11 @@ def two_proportion_z_test(control_visitors, control_conversions,
     else:
         relative_lift = 0
     
-    # Significance decision (alpha = 0.05)
-    is_significant = p_value < 0.05
+    # Significance decision using custom alpha
+    is_significant = p_value < alpha
     
-    # 95% Confidence intervals for individual proportions
-    z_critical = norm.ppf(0.975)  # 1.96 for 95% CI
+    # Confidence intervals using custom alpha level
+    z_critical = norm.ppf(1 - alpha / 2)  # For custom confidence level
     
     # CI for control proportion
     se_control = math.sqrt(p_control * (1 - p_control) / control_visitors)
@@ -71,7 +72,7 @@ def two_proportion_z_test(control_visitors, control_conversions,
     ci_variant_lower = p_variant - z_critical * se_variant
     ci_variant_upper = p_variant + z_critical * se_variant
     
-    # 95% Confidence interval for the difference in proportions
+    # Confidence interval for the difference in proportions (using custom alpha)
     ci_lower = absolute_lift - z_critical * se
     ci_upper = absolute_lift + z_critical * se
     

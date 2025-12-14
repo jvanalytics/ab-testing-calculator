@@ -46,6 +46,13 @@
                             value="{{ variant_conversions or '' }}" min="0" required>
                     </div>
 
+                    <div class="mb-3">
+                        <label for="alpha" class="form-label">Nível de Significância (Alpha)</label>
+                        <input type="number" step="0.01" class="form-control" id="alpha" name="alpha"
+                            value="{{ alpha or 0.05 }}" min="0.01" max="0.1" required>
+                        <small class="form-text text-muted">Padrão: 0.05 (5%)</small>
+                    </div>
+
                     <button type="submit" class="btn btn-primary">Calcular</button>
                     <button type="reset" class="btn btn-secondary">Redefinir</button>
                     <button type="button" class="btn btn-outline-info" onclick="prefillConversionRate()">Preencher com
@@ -103,7 +110,7 @@
 
                 {% if 'ci_control_lower' in result %}
                 <div class="mt-4">
-                    <h6>Intervalo de Confiança de 95%</h6>
+                    <h6>Intervalo de Confiança de {{ "%.0f"|format((1 - (alpha or 0.05)) * 100) }}%</h6>
                     <canvas id="ciChart" style="max-height: 200px;"></canvas>
                 </div>
                 {% endif %}
@@ -121,6 +128,7 @@
         document.getElementById('control_conversions').value = '50';
         document.getElementById('variant_visitors').value = '1000';
         document.getElementById('variant_conversions').value = '60';
+        document.getElementById('alpha').value = '0.05';
     }
 </script>
 {% if result and 'ci_control_lower' in result %}

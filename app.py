@@ -32,20 +32,40 @@ def conversion_rate():
             control_conversions = int(request.form.get('control_conversions', 0))
             variant_visitors = int(request.form.get('variant_visitors', 0))
             variant_conversions = int(request.form.get('variant_conversions', 0))
+            alpha = float(request.form.get('alpha', 0.05))
+            
+            # Validate alpha range
+            if alpha < 0.01 or alpha > 0.1:
+                raise ValueError("Alpha deve estar entre 0.01 e 0.1")
             
             result = two_proportion_z_test(
                 control_visitors, control_conversions,
-                variant_visitors, variant_conversions
+                variant_visitors, variant_conversions, alpha
             )
             
             return render_template('conversion_rate.html', result=result, 
                                  control_visitors=control_visitors,
                                  control_conversions=control_conversions,
                                  variant_visitors=variant_visitors,
-                                 variant_conversions=variant_conversions)
+                                 variant_conversions=variant_conversions,
+                                 alpha=alpha)
         except (ValueError, ZeroDivisionError) as e:
             error = str(e)
-            return render_template('conversion_rate.html', error=error)
+            # Preserve form values on error
+            # Safely parse alpha - if invalid, use default
+            try:
+                alpha = float(request.form.get('alpha', 0.05))
+                # Validate alpha range
+                if alpha < 0.01 or alpha > 0.1:
+                    alpha = 0.05
+            except (ValueError, TypeError):
+                alpha = 0.05
+            return render_template('conversion_rate.html', error=error,
+                                 control_visitors=request.form.get('control_visitors', ''),
+                                 control_conversions=request.form.get('control_conversions', ''),
+                                 variant_visitors=request.form.get('variant_visitors', ''),
+                                 variant_conversions=request.form.get('variant_conversions', ''),
+                                 alpha=alpha)
     
     return render_template('conversion_rate.html')
 
