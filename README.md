@@ -1,6 +1,6 @@
-# A/B Testing Calculator Suite
+# CRO Portugal - Calculadora de Testes A/B
 
-A fully functional, production-ready Python web application built with Flask that provides a comprehensive suite of A/B testing statistical calculators. The application includes multilingual support (English/Portuguese) and is fully containerized for easy deployment.
+Uma aplicação web Python totalmente funcional e pronta para produção, construída com Flask, que fornece uma suíte completa de calculadoras estatísticas para testes A/B. A aplicação está totalmente containerizada para fácil implantação e focada no mercado português.
 
 ## Features
 
@@ -27,11 +27,9 @@ A fully functional, production-ready Python web application built with Flask tha
 - Estimates test duration based on daily sample volume
 - Calculates Cohen's d effect size
 
-### Internationalization
-- Full support for English (EN) and Portuguese (PT)
-- Language toggle available on every page
-- All UI strings, labels, and results are translated
-- Language preference persists via session
+### Idioma
+- Interface totalmente em Português
+- Focado no mercado português
 
 ## Technology Stack
 
@@ -51,8 +49,7 @@ ab-testing-calculator/
 ├── docker-compose.yml    # Docker Compose configuration
 ├── utils/
 │   ├── __init__.py
-│   ├── statistics.py     # Statistical functions
-│   └── i18n.py          # Internationalization utilities
+│   └── statistics.py     # Statistical functions
 ├── templates/
 │   ├── base.html        # Base template
 │   ├── index.html       # Home page
@@ -60,9 +57,6 @@ ab-testing-calculator/
 │   ├── average_value.html
 │   ├── planner_proportion.html
 │   └── planner_average.html
-├── locales/
-│   ├── en.json          # English translations
-│   └── pt.json          # Portuguese translations
 └── tests/
     ├── __init__.py
     └── test_statistics.py  # Unit tests
@@ -257,32 +251,32 @@ Or using unittest:
 python -m unittest tests.test_statistics
 ```
 
-## Usage Examples
+## Exemplos de Uso
 
-### Conversion Rate Test
-1. Navigate to "Conversion Rate Test"
-2. Enter:
-   - Control visitors: 1000
-   - Control conversions: 50
-   - Variant visitors: 1000
-   - Variant conversions: 60
-3. Click "Calculate"
-4. Review results including Z-score, P-value, and significance
+### Teste de Taxa de Conversão
+1. Navegue para "Teste de Taxa de Conversão"
+2. Insira:
+   - Visitantes do controle: 1000
+   - Conversões do controle: 50
+   - Visitantes da variante: 1000
+   - Conversões da variante: 60
+3. Clique em "Calcular"
+4. Revise os resultados incluindo Z-score, valor P e significância
 
-### Average Value Test
-1. Navigate to "Average Value Test"
-2. Select test type (Welch's t-test or Mann-Whitney U)
-3. Enter mean, standard deviation, and sample size for both groups
-4. Click "Calculate"
-5. Review results including confidence intervals
+### Teste de Valor Médio
+1. Navegue para "Teste de Valor Médio"
+2. Selecione o tipo de teste (teste t de Welch ou U de Mann-Whitney)
+3. Insira média, desvio padrão e tamanho da amostra para ambos os grupos
+4. Clique em "Calcular"
+5. Revise os resultados incluindo intervalos de confiança
 
-### Test Planner
-1. Navigate to "Proportion Planner" or "Average Planner"
-2. Enter baseline metrics and desired effect size
-3. Set power and alpha levels
-4. Optionally enter daily traffic/sample volume
-5. Click "Calculate"
-6. Review required sample size and estimated duration
+### Planejador de Teste
+1. Navegue para "Planejador de Proporção" ou "Planejador de Média"
+2. Insira métricas de linha de base e tamanho de efeito desejado
+3. Defina níveis de poder e alpha
+4. Opcionalmente, insira tráfego diário/volume de amostra
+5. Clique em "Calcular"
+6. Revise o tamanho de amostra necessário e duração estimada
 
 ## Statistical Methods
 
@@ -338,8 +332,7 @@ This is a production-ready application. To extend it:
 1. Add new statistical tests in `utils/statistics.py`
 2. Add corresponding routes in `app.py`
 3. Create templates in `templates/`
-4. Add translations in `locales/`
-5. Write tests in `tests/`
+4. Write tests in `tests/`
 
 ## License
 
@@ -354,5 +347,7 @@ For issues or questions:
 
 ---
 
-**Built with Flask | Deployed with Docker | Ready for Railway**
+**CRO Portugal - Otimização de Taxa de Conversão e Testes A/B em Portugal**
+
+**Construído com Flask | Implantado com Docker | Pronto para Railway**
 

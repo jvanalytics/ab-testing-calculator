@@ -3,8 +3,8 @@
 {% block content %}
 <div class="row">
     <div class="col-12">
-        <h2>{{ t('planner_average_title') }}</h2>
-        <p class="text-muted">{{ t('planner_average_subtitle') }}</p>
+        <h2>Planeador de Teste A/B - Valor Médio</h2>
+        <p class="text-muted">Calcule o tamanho de amostra necessário para testes de variáveis contínuas</p>
     </div>
 </div>
 
@@ -12,7 +12,7 @@
     <div class="col-lg-6">
         <div class="card shadow-sm">
             <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">{{ t('planner_average_title') }}</h5>
+                <h5 class="mb-0">Planeador de Teste A/B - Valor Médio</h5>
             </div>
             <div class="card-body">
                 {% if error %}
@@ -20,93 +20,91 @@
                     {{ error }}
                 </div>
                 {% endif %}
-                
+
                 <form method="POST">
                     <div class="mb-3">
-                        <label for="expected_mean" class="form-label">{{ t('planner_average_expected_mean') }}</label>
-                        <input type="number" step="0.01" class="form-control" id="expected_mean" 
-                               name="expected_mean" value="{{ expected_mean or '' }}" required>
+                        <label for="expected_mean" class="form-label">Média Esperada</label>
+                        <input type="number" step="0.01" class="form-control" id="expected_mean" name="expected_mean"
+                            value="{{ expected_mean or '' }}" required>
                     </div>
-                    
+
                     <div class="mb-3">
-                        <label for="expected_sd" class="form-label">{{ t('planner_average_expected_sd') }}</label>
-                        <input type="number" step="0.01" class="form-control" id="expected_sd" 
-                               name="expected_sd" value="{{ expected_sd or '' }}" min="0.01" required>
+                        <label for="expected_sd" class="form-label">Desvio Padrão Esperado</label>
+                        <input type="number" step="0.01" class="form-control" id="expected_sd" name="expected_sd"
+                            value="{{ expected_sd or '' }}" min="0.01" required>
                     </div>
-                    
+
                     <div class="mb-3">
-                        <label for="min_detectable_diff" class="form-label">{{ t('planner_average_min_detectable_diff') }}</label>
-                        <input type="number" step="0.01" class="form-control" id="min_detectable_diff" 
-                               name="min_detectable_diff" value="{{ min_detectable_diff or '' }}" 
-                               min="0.01" required>
+                        <label for="min_detectable_diff" class="form-label">Diferença Mínima Detectável</label>
+                        <input type="number" step="0.01" class="form-control" id="min_detectable_diff"
+                            name="min_detectable_diff" value="{{ min_detectable_diff or '' }}" min="0.01" required>
                     </div>
-                    
+
                     <div class="mb-3">
-                        <label for="power" class="form-label">{{ t('planner_average_power') }}</label>
-                        <input type="number" step="0.01" class="form-control" id="power" 
-                               name="power" value="{{ power or 0.8 }}" 
-                               min="0.1" max="0.99" required>
-                        <small class="form-text text-muted">Default: 0.8 (80%)</small>
+                        <label for="power" class="form-label">Poder Estatístico</label>
+                        <input type="number" step="0.01" class="form-control" id="power" name="power"
+                            value="{{ power or 0.8 }}" min="0.1" max="0.99" required>
+                        <small class="form-text text-muted">Padrão: 0.8 (80%)</small>
                     </div>
-                    
+
                     <div class="mb-3">
-                        <label for="alpha" class="form-label">{{ t('planner_average_alpha') }}</label>
-                        <input type="number" step="0.01" class="form-control" id="alpha" 
-                               name="alpha" value="{{ alpha or 0.05 }}" 
-                               min="0.01" max="0.1" required>
-                        <small class="form-text text-muted">Default: 0.05 (5%)</small>
+                        <label for="alpha" class="form-label">Nível de Significância (Alpha)</label>
+                        <input type="number" step="0.01" class="form-control" id="alpha" name="alpha"
+                            value="{{ alpha or 0.05 }}" min="0.01" max="0.1" required>
+                        <small class="form-text text-muted">Padrão: 0.05 (5%)</small>
                     </div>
-                    
+
                     <div class="mb-3">
-                        <label for="daily_sample" class="form-label">{{ t('planner_average_daily_sample') }}</label>
-                        <input type="number" class="form-control" id="daily_sample" 
-                               name="daily_sample" value="{{ daily_sample or '' }}" min="1">
-                        <small class="form-text text-muted">Optional: for duration calculation</small>
+                        <label for="daily_sample" class="form-label">Volume de Amostra Diário</label>
+                        <input type="number" class="form-control" id="daily_sample" name="daily_sample"
+                            value="{{ daily_sample or '' }}" min="1">
+                        <small class="form-text text-muted">Opcional: para cálculo de duração</small>
                     </div>
-                    
-                    <button type="submit" class="btn btn-primary">{{ t('button_calculate') }}</button>
-                    <button type="reset" class="btn btn-secondary">{{ t('button_reset') }}</button>
-                    <button type="button" class="btn btn-outline-info" onclick="prefillPlannerAverage()">{{ t('button_prefill') }}</button>
+
+                    <button type="submit" class="btn btn-primary">Calcular</button>
+                    <button type="reset" class="btn btn-secondary">Redefinir</button>
+                    <button type="button" class="btn btn-outline-info" onclick="prefillPlannerAverage()">Preencher com
+                        Dados de Exemplo</button>
                 </form>
             </div>
         </div>
     </div>
-    
+
     <div class="col-lg-6">
         {% if result %}
         <div class="card shadow-sm result-card">
             <div class="card-header bg-success text-white">
-                <h5 class="mb-0">{{ t('planner_average_results') }}</h5>
+                <h5 class="mb-0">Resultados</h5>
             </div>
             <div class="card-body">
                 <table class="table table-bordered">
                     <tr>
-                        <td><strong>{{ t('planner_average_sample_per_group') }}</strong></td>
+                        <td><strong>Amostra Necessária por Grupo</strong></td>
                         <td>{{ "{:,}".format(result.sample_per_group) }}</td>
                     </tr>
                     <tr>
-                        <td><strong>{{ t('planner_average_total_sample') }}</strong></td>
+                        <td><strong>Tamanho Total da Amostra</strong></td>
                         <td>{{ "{:,}".format(result.total_sample) }}</td>
                     </tr>
                     {% if result.days %}
                     <tr>
-                        <td><strong>{{ t('planner_average_duration_days') }}</strong></td>
+                        <td><strong>Duração Estimada (Dias)</strong></td>
                         <td>{{ result.days }}</td>
                     </tr>
                     <tr>
-                        <td><strong>{{ t('planner_average_duration_weeks') }}</strong></td>
+                        <td><strong>Duração Estimada (Semanas)</strong></td>
                         <td>{{ result.weeks }}</td>
                     </tr>
                     {% endif %}
                     <tr>
-                        <td><strong>{{ t('planner_average_cohens_d') }}</strong></td>
+                        <td><strong>d de Cohen (Tamanho do Efeito)</strong></td>
                         <td>{{ "%.4f"|format(result.cohens_d) }}</td>
                     </tr>
                 </table>
                 <div class="alert alert-info mt-3">
-                    <strong>Details:</strong><br>
-                    Effect Size: {{ "%.4f"|format(result.effect_size) }}<br>
-                    Cohen's d: {{ "%.4f"|format(result.cohens_d) }}
+                    <strong>Detalhes:</strong><br>
+                    Tamanho do Efeito: {{ "%.4f"|format(result.effect_size) }}<br>
+                    d de Cohen: {{ "%.4f"|format(result.cohens_d) }}
                 </div>
             </div>
         </div>
@@ -117,14 +115,13 @@
 
 {% block scripts %}
 <script>
-function prefillPlannerAverage() {
-    document.getElementById('expected_mean').value = '100';
-    document.getElementById('expected_sd').value = '15';
-    document.getElementById('min_detectable_diff').value = '5';
-    document.getElementById('power').value = '0.8';
-    document.getElementById('alpha').value = '0.05';
-    document.getElementById('daily_sample').value = '50';
-}
+    function prefillPlannerAverage() {
+        document.getElementById('expected_mean').value = '100';
+        document.getElementById('expected_sd').value = '15';
+        document.getElementById('min_detectable_diff').value = '5';
+        document.getElementById('power').value = '0.8';
+        document.getElementById('alpha').value = '0.05';
+        document.getElementById('daily_sample').value = '50';
+    }
 </script>
 {% endblock %}
-

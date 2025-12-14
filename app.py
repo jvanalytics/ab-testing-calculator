@@ -12,22 +12,9 @@ from utils.statistics import (
     sample_size_proportion,
     sample_size_continuous
 )
-from utils.i18n import get_text
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
-
-
-@app.context_processor
-def inject_translations():
-    """Make translation function available in all templates"""
-    language = session.get('language', 'en')
-    
-    def t(key, default=None):
-        """Template helper for translations"""
-        return get_text(key, language, default)
-    
-    return dict(t=t, lang=language)
 
 
 @app.route('/')
@@ -187,14 +174,6 @@ def planner_average():
     return render_template('planner_average.html')
 
 
-@app.route('/set-language/<language>')
-def set_language(language):
-    """Set language preference"""
-    if language in ['en', 'pt']:
-        session['language'] = language
-    # Redirect back to the previous page or home
-    from flask import redirect, url_for, request as req
-    return redirect(req.referrer or url_for('index'))
 
 
 if __name__ == '__main__':

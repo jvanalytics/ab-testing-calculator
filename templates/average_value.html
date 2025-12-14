@@ -3,8 +3,8 @@
 {% block content %}
 <div class="row">
     <div class="col-12">
-        <h2>{{ t('average_value_title') }}</h2>
-        <p class="text-muted">{{ t('average_value_subtitle') }}</p>
+        <h2>Teste de Significância do Valor Médio</h2>
+        <p class="text-muted">Teste z (DP populacional conhecido) ou teste t (DP amostral)</p>
     </div>
 </div>
 
@@ -12,7 +12,7 @@
     <div class="col-lg-6">
         <div class="card shadow-sm">
             <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">{{ t('average_value_title') }}</h5>
+                <h5 class="mb-0">Teste de Significância do Valor Médio</h5>
             </div>
             <div class="card-body">
                 {% if error %}
@@ -27,64 +27,70 @@
                             <input class="form-check-input" type="checkbox" id="known_pop_sd" name="known_pop_sd" {% if
                                 known_pop_sd %}checked{% endif %} onchange="toggleSDInputs()">
                             <label class="form-check-label" for="known_pop_sd">
-                                {{ t('average_value_known_pop_sd') }}
+                                Eu conheço o desvio padrão populacional
                             </label>
                         </div>
-                        <small class="form-text text-muted">{{ t('average_value_known_pop_sd_help') }}</small>
+                        <small class="form-text text-muted">Marque isso se você conhece o desvio padrão verdadeiro da
+                            população (use teste z). Deixe desmarcado para usar o desvio padrão amostral (teste
+                            t).</small>
                     </div>
 
-                    <h6 class="mt-2 mb-3">{{ t('average_value_group_a') }}</h6>
+                    <h6 class="mt-2 mb-3">Grupo A</h6>
                     <div class="mb-3">
-                        <label for="mean_a" class="form-label">{{ t('average_value_mean') }}</label>
+                        <label for="mean_a" class="form-label">Média</label>
                         <input type="number" step="0.01" class="form-control" id="mean_a" name="mean_a"
                             value="{{ mean_a or '' }}" required>
                     </div>
                     <div class="mb-3" id="sd_a_container">
-                        <label for="sd_a" class="form-label" id="sd_a_label">{{ t('average_value_sd') }}</label>
+                        <label for="sd_a" class="form-label" id="sd_a_label">Desvio Padrão Amostral</label>
                         <input type="number" step="0.01" class="form-control" id="sd_a" name="sd_a"
                             value="{{ sd_a or '' }}" min="0.01" required>
-                        <small class="form-text text-muted" id="sd_a_help">{{ t('average_value_sd_help') }}</small>
+                        <small class="form-text text-muted" id="sd_a_help">Desvio padrão calculado a partir dos seus
+                            dados amostrais</small>
                     </div>
                     <div class="mb-3" id="pop_sd_a_container" style="display: none;">
-                        <label for="pop_sd_a" class="form-label">{{ t('average_value_pop_sd') }}</label>
+                        <label for="pop_sd_a" class="form-label">Desvio Padrão Populacional</label>
                         <input type="number" step="0.01" class="form-control" id="pop_sd_a" name="pop_sd_a"
                             value="{{ pop_sd_a or '' }}" min="0.01">
-                        <small class="form-text text-muted">{{ t('average_value_pop_sd_help') }}</small>
+                        <small class="form-text text-muted">O desvio padrão verdadeiro de toda a população (se
+                            conhecido)</small>
                     </div>
                     <div class="mb-3">
-                        <label for="n_a" class="form-label">{{ t('average_value_n') }}</label>
+                        <label for="n_a" class="form-label">Tamanho da Amostra (n)</label>
                         <input type="number" class="form-control" id="n_a" name="n_a" value="{{ n_a or '' }}" min="1"
                             required>
                     </div>
 
-                    <h6 class="mt-4 mb-3">{{ t('average_value_group_b') }}</h6>
+                    <h6 class="mt-4 mb-3">Grupo B</h6>
                     <div class="mb-3">
-                        <label for="mean_b" class="form-label">{{ t('average_value_mean') }}</label>
+                        <label for="mean_b" class="form-label">Média</label>
                         <input type="number" step="0.01" class="form-control" id="mean_b" name="mean_b"
                             value="{{ mean_b or '' }}" required>
                     </div>
                     <div class="mb-3" id="sd_b_container">
-                        <label for="sd_b" class="form-label" id="sd_b_label">{{ t('average_value_sd') }}</label>
+                        <label for="sd_b" class="form-label" id="sd_b_label">Desvio Padrão Amostral</label>
                         <input type="number" step="0.01" class="form-control" id="sd_b" name="sd_b"
                             value="{{ sd_b or '' }}" min="0.01" required>
-                        <small class="form-text text-muted" id="sd_b_help">{{ t('average_value_sd_help') }}</small>
+                        <small class="form-text text-muted" id="sd_b_help">Desvio padrão calculado a partir dos seus
+                            dados amostrais</small>
                     </div>
                     <div class="mb-3" id="pop_sd_b_container" style="display: none;">
-                        <label for="pop_sd_b" class="form-label">{{ t('average_value_pop_sd') }}</label>
+                        <label for="pop_sd_b" class="form-label">Desvio Padrão Populacional</label>
                         <input type="number" step="0.01" class="form-control" id="pop_sd_b" name="pop_sd_b"
                             value="{{ pop_sd_b or '' }}" min="0.01">
-                        <small class="form-text text-muted">{{ t('average_value_pop_sd_help') }}</small>
+                        <small class="form-text text-muted">O desvio padrão verdadeiro de toda a população (se
+                            conhecido)</small>
                     </div>
                     <div class="mb-3">
-                        <label for="n_b" class="form-label">{{ t('average_value_n') }}</label>
+                        <label for="n_b" class="form-label">Tamanho da Amostra (n)</label>
                         <input type="number" class="form-control" id="n_b" name="n_b" value="{{ n_b or '' }}" min="1"
                             required>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">{{ t('button_calculate') }}</button>
-                    <button type="reset" class="btn btn-secondary">{{ t('button_reset') }}</button>
-                    <button type="button" class="btn btn-outline-info" onclick="prefillAverageValue()">{{
-                        t('button_prefill') }}</button>
+                    <button type="submit" class="btn btn-primary">Calcular</button>
+                    <button type="reset" class="btn btn-secondary">Redefinir</button>
+                    <button type="button" class="btn btn-outline-info" onclick="prefillAverageValue()">Preencher com
+                        Dados de Exemplo</button>
                 </form>
             </div>
         </div>
@@ -94,52 +100,51 @@
         {% if result %}
         <div class="card shadow-sm result-card">
             <div class="card-header bg-success text-white">
-                <h5 class="mb-0">{{ t('average_value_results') }}</h5>
+                <h5 class="mb-0">Resultados</h5>
             </div>
             <div class="card-body">
                 <table class="table table-bordered">
                     <tr>
-                        <td><strong>{{ t('average_value_mean_diff') }}</strong></td>
+                        <td><strong>Diferença de Médias</strong></td>
                         <td>{{ "%.4f"|format(result.mean_diff) }}</td>
                     </tr>
                     {% if result.test_type == 'z-test' %}
                     <tr>
-                        <td><strong>{{ t('average_value_z_statistic') }}</strong></td>
+                        <td><strong>Estatística Z</strong></td>
                         <td>{{ "%.4f"|format(result.z_statistic) }}</td>
                     </tr>
                     {% else %}
                     <tr>
-                        <td><strong>{{ t('average_value_t_statistic') }}</strong></td>
+                        <td><strong>Estatística t</strong></td>
                         <td>{{ "%.4f"|format(result.t_statistic) }}</td>
                     </tr>
                     <tr>
-                        <td><strong>{{ t('average_value_degrees_of_freedom') }}</strong></td>
+                        <td><strong>Graus de Liberdade</strong></td>
                         <td>{{ result.degrees_of_freedom }}</td>
                     </tr>
                     {% endif %}
                     <tr>
-                        <td><strong>{{ t('average_value_p_value') }}</strong></td>
+                        <td><strong>Valor P</strong></td>
                         <td>{{ "%.4f"|format(result.p_value) }}</td>
                     </tr>
                     {% if 'ci_lower' in result %}
                     <tr>
-                        <td><strong>{{ t('average_value_ci') }}</strong></td>
+                        <td><strong>Intervalo de Confiança de 95%</strong></td>
                         <td>[{{ "%.4f"|format(result.ci_lower) }}, {{ "%.4f"|format(result.ci_upper) }}]</td>
                     </tr>
                     {% endif %}
                     <tr>
-                        <td><strong>{{ t('conversion_rate_significant' if result.is_significant else
-                                'conversion_rate_not_significant') }}</strong></td>
+                        <td><strong>{% if result.is_significant %}Significativo{% else %}Não Significativo{% endif
+                                %}</strong></td>
                         <td>
                             <span class="badge bg-{{ 'success' if result.is_significant else 'warning' }}">
-                                {{ t('conversion_rate_significant' if result.is_significant else
-                                'conversion_rate_not_significant') }}
+                                {% if result.is_significant %}Significativo{% else %}Não Significativo{% endif %}
                             </span>
                         </td>
                     </tr>
                 </table>
                 <div class="alert alert-info mt-3">
-                    <strong>{{ t('average_value_interpretation') }}:</strong> {{ result.interpretation }}
+                    <strong>Interpretação:</strong> {{ result.interpretation }}
                 </div>
                 {% if result.note %}
                 <div class="alert alert-warning mt-2">
@@ -148,7 +153,7 @@
                 {% endif %}
 
                 <div class="mt-4">
-                    <h6>{{ t('bell_curve_title') }}</h6>
+                    <h6>Comparação de Distribuições</h6>
                     <canvas id="bellCurveChart" style="max-height: 300px;"></canvas>
                 </div>
             </div>
@@ -255,14 +260,14 @@
         data: {
             labels: labels,
             datasets: [{
-                label: '{{ t("average_value_group_a") }}',
+                label: 'Grupo A',
                 data: dataA,
                 borderColor: 'rgb(75, 192, 192)',
                 backgroundColor: 'rgba(75, 192, 192, 0.1)',
                 tension: 0.4,
                 fill: true
             }, {
-                label: '{{ t("average_value_group_b") }}',
+                label: 'Grupo B',
                 data: dataB,
                 borderColor: 'rgb(255, 99, 132)',
                 backgroundColor: 'rgba(255, 99, 132, 0.1)',
@@ -286,13 +291,13 @@
                 x: {
                     title: {
                         display: true,
-                        text: '{{ t("bell_curve_x_axis") }}'
+                        text: 'Valor'
                     }
                 },
                 y: {
                     title: {
                         display: true,
-                        text: '{{ t("bell_curve_y_axis") }}'
+                        text: 'Densidade de Probabilidade'
                     },
                     beginAtZero: true
                 }
